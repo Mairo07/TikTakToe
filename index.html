@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="root">
+        <div class="row">
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+        </div>
+        <div class="row">
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+        </div>
+        <div class="row">
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+            <div class="outline" onclick="handleLeftClick(this)"></div>
+        </div>
+    </div>
+    <script>
+        
+        let currentValue
+        function handleLeftClick(element) {
+            
+            if ((element.innerText == "") && (currentValue == "X")) {
+                element.innerText = "O"
+                currentValue = "O"
+            } else if (element.innerText == "") {
+                element.innerText = "X"
+                currentValue = "X"
+            }
+            
+        }
+        
+    </script>
+</body>
+
+</html>

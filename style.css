@@ -1,0 +1,15 @@
+.row {
+    display: flex;
+}
+.outline {
+    height: 100px;
+    width: 100px;
+    padding: 20px;
+    border: 2px solid salmon;
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 40px;
+}
