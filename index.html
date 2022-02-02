@@ -9,39 +9,9 @@
 </head>
 
 <body>
-    <div id="root">
-        <div class="row">
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-        </div>
-        <div class="row">
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-        </div>
-        <div class="row">
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-            <div class="outline" onclick="handleLeftClick(this)"></div>
-        </div>
-    </div>
-    <script>
-        
-        let currentValue
-        function handleLeftClick(element) {
-            
-            if ((element.innerText == "") && (currentValue == "X")) {
-                element.innerText = "O"
-                currentValue = "O"
-            } else if (element.innerText == "") {
-                element.innerText = "X"
-                currentValue = "X"
-            }
-            
-        }
-        
-    </script>
+    <div id="root"></div>
+    <script src="index.js"></script>
+    
 </body>
 
 </html>
