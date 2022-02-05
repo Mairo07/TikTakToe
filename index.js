@@ -8,6 +8,45 @@ let state = [
     [null, null, null],
 ]
 
+
+
+    // 0[0, 1, 2],
+    // 1[0, 1, 2],
+    // 2[0, 1, 2],
+
+
+
+
+
+function checkState() {
+    let result = false
+
+
+    if ((state[0][0] == state[0][1]) && (state[0][1] == state[0][2]) && (state[0][0] != null)) {
+        result = true
+    } else if ((state[1][0] == state[1][1]) && (state[1][1] == state[1][2]) && (state[1][0] != null)) {
+        result = true
+    } else if ((state[2][0] == state[2][1]) && (state[2][1] == state[2][2]) && (state[2][0] != null)) {
+        result = true
+    } else if ((state[0][0] == state[1][0]) && (state[1][0] == state[2][0]) && (state[0][0] != null)) {
+        result = true
+    } else if ((state[0][1] == state[1][1]) && (state[1][1] == state[2][1]) && (state[0][1] != null)) {
+        result = true 
+    } else if ((state[0][2] == state[1][2]) && (state[1][2] == state[2][2]) && (state[0][2] != null)) {
+        result = true
+    } else if ((state[0][0] == state[1][1]) && (state[1][1] == state[2][2]) && (state[0][0] != null)) {
+        result = true
+    } else if ((state[0][2] == state[1][1]) && (state[1][1] == state[2][1]) && (state[0][2] != null)) {
+        result = true
+    } 
+    
+      
+    if (result == true) {
+        alert("WIN!")
+    } 
+}
+
+
 function handleLeftClick(element) {
 
     if ((element.innerText == "") && (currentValue == "X")) {
@@ -26,7 +65,7 @@ function createOutline(x, y) {
     squardElement.classList.add("outline");
     squardElement.addEventListener("click", function (event) {
         state[y][x] = handleLeftClick(squardElement)
-        console.log(state)
+        setTimeout(checkState, 0)
     })
     
     return squardElement
