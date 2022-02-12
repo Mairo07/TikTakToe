@@ -2,6 +2,8 @@ let currentValue
 
 let rootElement = window.document.getElementById("root")
 
+
+
 let state = [
     [null, null, null],
     [null, null, null],
@@ -9,42 +11,35 @@ let state = [
 ]
 
 
+for (let i = 0; i < state.length; i++) {
+    let rowElement = window.document.createElement("div");
+    rowElement.classList.add("row");
+    rootElement.appendChild(rowElement)
+
+    for (let j = 0; j < state[i].length; j++) {
+        rowElement.appendChild(createOutline(i, j))
+    }
+}
 
     // 0[0, 1, 2],
     // 1[0, 1, 2],
     // 2[0, 1, 2],
 
 
-
-
-
 function checkState() {
-    let result = false
-
-
-    if ((state[0][0] == state[0][1]) && (state[0][1] == state[0][2]) && (state[0][0] != null)) {
-        result = true
-    } else if ((state[1][0] == state[1][1]) && (state[1][1] == state[1][2]) && (state[1][0] != null)) {
-        result = true
-    } else if ((state[2][0] == state[2][1]) && (state[2][1] == state[2][2]) && (state[2][0] != null)) {
-        result = true
-    } else if ((state[0][0] == state[1][0]) && (state[1][0] == state[2][0]) && (state[0][0] != null)) {
-        result = true
-    } else if ((state[0][1] == state[1][1]) && (state[1][1] == state[2][1]) && (state[0][1] != null)) {
-        result = true 
-    } else if ((state[0][2] == state[1][2]) && (state[1][2] == state[2][2]) && (state[0][2] != null)) {
-        result = true
-    } else if ((state[0][0] == state[1][1]) && (state[1][1] == state[2][2]) && (state[0][0] != null)) {
-        result = true
-    } else if ((state[0][2] == state[1][1]) && (state[1][1] == state[2][1]) && (state[0][2] != null)) {
-        result = true
-    } 
-    
       
-    if (result == true) {
+    if ((state[0][0] == state[0][1]) && (state[0][1] == state[0][2]) && (state[0][0] != null)
+    || (state[1][0] == state[1][1]) && (state[1][1] == state[1][2]) && (state[1][0] != null) 
+    || (state[2][0] == state[2][1]) && (state[2][1] == state[2][2]) && (state[2][0] != null) 
+    || (state[0][0] == state[1][0]) && (state[1][0] == state[2][0]) && (state[0][0] != null) 
+    || (state[0][1] == state[1][1]) && (state[1][1] == state[2][1]) && (state[0][1] != null) 
+    || (state[0][2] == state[1][2]) && (state[1][2] == state[2][2]) && (state[0][2] != null) 
+    || (state[0][0] == state[1][1]) && (state[1][1] == state[2][2]) && (state[0][0] != null) 
+    || (state[0][2] == state[1][1]) && (state[1][1] == state[2][0]) && (state[0][2] != null)) {
         alert("WIN!")
     } 
 }
+
 
 
 function handleLeftClick(element) {
@@ -67,23 +62,11 @@ function createOutline(x, y) {
         state[y][x] = handleLeftClick(squardElement)
         setTimeout(checkState, 0)
     })
+
+    if (x == 1 && y == 1) {
+        squardElement.click()
+    }
     
     return squardElement
 }
-
-function createRow(y) {
-    let rowElement = window.document.createElement("div");
-    rowElement.classList.add("row");    
-    rowElement.appendChild(createOutline(0, y));
-    rowElement.appendChild(createOutline(1, y));
-    rowElement.appendChild(createOutline(2, y));
-
-    return rowElement
-}
-
-rootElement.appendChild(createRow(0));
-rootElement.appendChild(createRow(1));
-rootElement.appendChild(createRow(2));
-
-
 
