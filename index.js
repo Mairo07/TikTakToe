@@ -2,14 +2,15 @@ let currentValue
 
 let rootElement = window.document.getElementById("root")
 
-
-
 let state = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
+    [null, null, null,],
+    [null, null, null,],
+    [null, null, null,],
 ]
 
+// 0[0, 1, 2],
+// 1[0, 1, 2],
+// 2[0, 1, 2],
 
 for (let i = 0; i < state.length; i++) {
     let rowElement = window.document.createElement("div");
@@ -17,13 +18,101 @@ for (let i = 0; i < state.length; i++) {
     rootElement.appendChild(rowElement)
 
     for (let j = 0; j < state[i].length; j++) {
-        rowElement.appendChild(createOutline(i, j))
+        rowElement.appendChild(createOutline(j, i))
     }
 }
 
-    // 0[0, 1, 2],
-    // 1[0, 1, 2],
-    // 2[0, 1, 2],
+function isX(element) {
+    return element == "X"
+}
+
+function isO(element) {
+    return element == "O"
+}
+
+
+function findWinning() {
+    let diagonalResult = true
+    
+    for (let i = 0; i < state.length; i++) {
+        diagonalResult = state[0][0] === state[i][i]
+        
+        if (diagonalResult === false) {
+            break
+        }
+        
+    }
+    if ((state[0][0] !== null) && (diagonalResult === true)) {
+        alert("win" + " " + state[0][0])
+        return 
+    } 
+   
+    for (let i = 0; i < state.length; i++) {
+        diagonalResult = state[state.length - 1][0] === state[i][state.length - 1 - i]
+        
+        if (diagonalResult === false) {
+            break
+        }
+
+    }   
+    if ((state[state.length - 1][0] !== null) && (diagonalResult === true)) {
+        alert("win" + " " + state[state.length - 1][0])
+        return 
+    } 
+
+    for (let i = 0; i < state.length; i++) {
+        let result = true
+                        
+        for (let k = 1; k < state.length; k++) {
+            result = state[0][i] === state[k][i]
+
+            if (result === false) {
+                break
+            }
+
+        }
+        if ((state[0][i] !== null) && (result === true)) {
+            alert("win" + " " + state[0][i])
+            return 
+        } 
+
+        for (let j = 1; j < state[i].length; j++) {                 
+            result = state[i][0] === state[i][j]
+
+            if (result === false) {
+                break
+            }
+            
+        }
+         if ((state[i][0] !== null) && (result === true)) {
+            alert("win" + " " + state[i][0])
+            return 
+        } 
+        
+    }
+
+}
+       
+/*
+function findWinning() {
+    for (let i = 0; i < state.length; i++) {
+
+        if (state[i].every(isX)) {
+            alert("X WIN!")
+        } else if (state[i].every(isO)) {
+            alert("O WIN!")
+        } else if ((state[0][i] == "X") && (state[1][i] == "X") && (state[2][i] == "X")) {
+            alert("X WIN!")
+        } else if ((state[0][i] == "O") && (state[1][i] == "O") && (state[2][i] == "O")) {
+            alert("O WIN!")
+        }
+
+
+    
+    }
+    
+}
+*/
 
 
 function checkState() {
@@ -60,7 +149,8 @@ function createOutline(x, y) {
     squardElement.classList.add("outline");
     squardElement.addEventListener("click", function (event) {
         state[y][x] = handleLeftClick(squardElement)
-        setTimeout(checkState, 0)
+        setTimeout(findWinning, 0)
+        
     })
 
     if (x == 1 && y == 1) {
