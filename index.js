@@ -20,12 +20,12 @@ let state = [
 function findWinnerItem(items, y, x) {
 
     function findWinerElement(item) {
-        if ((item[0] === y)&&(item[1] === x)) {
+        if ((item[0] === y) && (item[1] === x)) {
             return true
         }
     }
 
-    return items.find(findWinerElement) 
+    return items.find(findWinerElement)
 
 }
 
@@ -37,7 +37,7 @@ function render(state, item) {
         let rowElement = window.document.createElement("div");
         rowElement.classList.add("row");
         rootElement.appendChild(rowElement)
-    
+
         for (let j = 0; j < state[i].length; j++) {
             let element = createOutline(i, j)
             rowElement.appendChild(element)
@@ -47,100 +47,92 @@ function render(state, item) {
             } else if (state[i][j] === "O") {
                 element.innerText = "O"
             }
-                      
+
             if (findWinnerItem(item, i, j)) {
                 element.classList.add("winnerItems")
             }
-            
+
         }
     }
 
 }
 
-function getWinnerItems(state, type, index) {
-    let result = true
-    let winnerItems = []
-    let compareItem
+function getResult(type, compareItem, i, index) {
+    let comparison = true
+    let result
 
-    if (type === "diagonal1") {
-        compareItem = state[0][0]
-    } else if (type === "diagonal2") {
-        compareItem = state[state.length - 1][0]
-    } else if (type === "row") {
-        compareItem = state[index][0]
-    } else if (type === "colum") {
-        compareItem = state[0][index]
-    }
+        if (type === "diagonal1") {
+            comparison = compareItem === state[i][i]
+            result = [i, i]
+        } else if (type === "diagonal2") {
+            comparison = compareItem === state[i][state.length - 1 - i]
+            result = [i, state.length - 1 - i]
+        } else if (type === "row") {
+            comparison = compareItem === state[index][i]
+            result = [index, i]
+        } else if (type === "colum") {
+            comparison = compareItem === state[i][index]
+            result = [i, index]
+        }
+
+        if ((compareItem !== null) && (comparison === true)) {
+            return result
+        }
+    
+    return []
+}
+
+function getWinnerItems(state, type, compareItem, callback, index) {
+    let result 
+    let winnerItems = []
 
     for (let i = 0; i < state.length; i++) {
-        if (type === "diagonal1") {
-            result = compareItem === state[i][i]
-        } else if (type === "diagonal2") {
-            result = compareItem === state[i][state.length - 1 - i]
-        } else if (type === "row") {
-            result = compareItem === state[index][i] 
-        } else if (type === "colum") {
-            result = compareItem === state[i][index]
-        }
-        
-        if (result === false) {
+        result = callback(type, compareItem, i, index)
+
+        if (result.length > 0) {
+            winnerItems.push(result)
+        } else {
             winnerItems = []
             break
-        } else { 
-            if (type === "diagonal1") {
-                winnerItems.push([i, i])
-            } else if (type === "diagonal2") {
-                winnerItems.push([i, state.length - 1 - i])
-            } else if (type === "row") {
-                winnerItems.push([index, i])
-            } else if (type === "colum") {
-                winnerItems.push([i, index])
-            }
         }
-        
+
     }
 
-    if ((compareItem !== null) && (result === true)) {
-    
-        return winnerItems
-    } 
+    return winnerItems
 
-    return []
-    
 }
 
 
-
-
-function getFindWinning() { 
+function getFindWinning() {
     let winnerItems = []
 
-    winnerItems = getWinnerItems(state, "diagonal1")
-    if (winnerItems.length > 0 ) {
+    winnerItems = getWinnerItems(state, "diagonal1", state[0][0], getResult)
+    if (winnerItems.length > 0) {
         return winnerItems
     }
 
-    winnerItems = getWinnerItems(state, "diagonal2")
+    winnerItems = getWinnerItems(state, "diagonal2", state[state.length - 1][0], getResult)
     if (winnerItems.length > 0) {
         return winnerItems
     }
 
     for (let i = 0; i < state.length; i++) {
 
-        winnerItems = getWinnerItems(state, "row", i)
+
+        winnerItems = getWinnerItems(state, "row", state[i][0], getResult, i)
         if (winnerItems.length > 0) {
             return winnerItems
         }
 
-        winnerItems = getWinnerItems(state, "colum", i)
+        winnerItems = getWinnerItems(state, "colum", state[0][i], getResult, i)
         if (winnerItems.length > 0) {
             return winnerItems
         }
     }
 
-return winnerItems = []
+    return winnerItems = []
 }
-       
+
 
 
 function getCurrentValue(state) {
@@ -148,17 +140,17 @@ function getCurrentValue(state) {
     let countOfX = 0
     let countOfO = 0
     for (let i = 0; i < state.length; i++) {
-        
+
         for (let j = 0; j < state[i].length; j++) {
 
             if (state[i][j] === "X") {
                 countOfX++
             } else if (state[i][j] === "O") {
                 countOfO++
-            } 
-        } 
-    }           
-    
+            }
+        }
+    }
+
     if (countOfX > countOfO) {
         currentValue = "O"
     } else if (countOfX === countOfO) {
@@ -174,15 +166,15 @@ function createOutline(y, x) {
 
     if (state[y][x] === null) {
         squardElement.addEventListener("click", function (event) {
-            
+
             state[y][x] = getCurrentValue(state)
             let winnerItems = getFindWinning()
             render(state, winnerItems)
             setTimeout(getFindWinning, 0)
-            
+
         })
     }
-    
+
     return squardElement
 }
 
