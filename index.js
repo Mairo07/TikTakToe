@@ -57,37 +57,56 @@ function render(state, item) {
 
 }
 
-function getResult(type, compareItem, i, index) {
-    let comparison = true
-    let result
+function getResultDiagonal1(state, compareItem, i) {
+     
+    if ((compareItem !== null) && (compareItem === state[i][i])) {
+        return [i, i]
+    }
 
-        if (type === "diagonal1") {
-            comparison = compareItem === state[i][i]
-            result = [i, i]
-        } else if (type === "diagonal2") {
-            comparison = compareItem === state[i][state.length - 1 - i]
-            result = [i, state.length - 1 - i]
-        } else if (type === "row") {
-            comparison = compareItem === state[index][i]
-            result = [index, i]
-        } else if (type === "colum") {
-            comparison = compareItem === state[i][index]
-            result = [i, index]
-        }
-
-        if ((compareItem !== null) && (comparison === true)) {
-            return result
-        }
-    
     return []
 }
 
-function getWinnerItems(state, type, compareItem, callback, index) {
+function getResultDiagonal2(state, compareItem, i) {
+     
+    if ((compareItem !== null) && (compareItem === state[i][state.length - 1 - i])) {
+        return [i, state.length - 1 - i]
+    }
+
+    return []
+}
+
+
+function getHandleResultRow(index) {
+     
+    return (state, compareItem, i) => {
+     
+        if ((compareItem !== null) && (compareItem === state[index][i])) {
+            return [index, i]
+        }
+    
+        return []
+    }   
+}
+
+function getHandleResultColum(index) {
+    
+    return (state, compareItem, i) => {
+
+            if ((compareItem !== null) && (compareItem === state[i][index])) {
+            return [i, index]
+        }
+
+        return []
+    }
+}
+
+
+function getWinnerItems(state, compareItem, callback) {
     let result 
     let winnerItems = []
 
     for (let i = 0; i < state.length; i++) {
-        result = callback(type, compareItem, i, index)
+        result = callback(state, compareItem, i)
 
         if (result.length > 0) {
             winnerItems.push(result)
@@ -99,32 +118,30 @@ function getWinnerItems(state, type, compareItem, callback, index) {
     }
 
     return winnerItems
-
 }
 
 
 function getFindWinning() {
     let winnerItems = []
 
-    winnerItems = getWinnerItems(state, "diagonal1", state[0][0], getResult)
+    winnerItems = getWinnerItems(state, state[0][0], getResultDiagonal1)
     if (winnerItems.length > 0) {
         return winnerItems
     }
 
-    winnerItems = getWinnerItems(state, "diagonal2", state[state.length - 1][0], getResult)
+    winnerItems = getWinnerItems(state, state[state.length - 1][0], getResultDiagonal2)
     if (winnerItems.length > 0) {
         return winnerItems
     }
 
     for (let i = 0; i < state.length; i++) {
 
-
-        winnerItems = getWinnerItems(state, "row", state[i][0], getResult, i)
+        winnerItems = getWinnerItems(state, state[i][0], getHandleResultRow(i))
         if (winnerItems.length > 0) {
             return winnerItems
         }
 
-        winnerItems = getWinnerItems(state, "colum", state[0][i], getResult, i)
+        winnerItems = getWinnerItems(state, state[0][i], getHandleResultColum(i))
         if (winnerItems.length > 0) {
             return winnerItems
         }
