@@ -1,5 +1,14 @@
 let rootElement = window.document.getElementById("root")
 
+let tableElement = document.createElement("div")
+tableElement.classList.add("table")
+rootElement.appendChild(tableElement)
+
+let statusElement = document.createElement("div")
+statusElement.classList.add("status")
+rootElement.appendChild(statusElement)
+
+ 
 
 
 
@@ -16,6 +25,66 @@ let state = [
 
 // let winnerItems = [[0,0],[1,1],[2,2]]
 
+function changeState(a) {
+    state = []
+
+    for (i = 0; i < a; i++) {
+        state.push([])
+        for (j = 0; j < a; j++) {
+            state[i].push(null)
+        }
+
+    }
+
+    render(state, [])
+
+}
+function createNewGameButton() {
+    let newGameButton = document.createElement("button")
+    newGameButton.textContent = "Новая игра"
+    statusElement.appendChild(newGameButton)
+    return newGameButton
+}
+
+function createSelect() {
+    let table3X3 = "3x3"
+    let table4X4 = "4x4"
+    let table5X5 = "5x5"
+    let table10X10 = "10x10"
+    let table15X15 = "15x15"
+
+    let stateOptions = [table3X3, table4X4, table5X5, table10X10, table15X15]
+
+    let selectList = document.createElement("select");
+    statusElement.appendChild(selectList)
+
+    for (i = 0; i < stateOptions.length; i++) {
+        let selectOptions = document.createElement("option")
+        selectOptions.value = stateOptions[i]
+        if (selectOptions.value === table3X3) {
+            selectOptions.selected = "selected"
+        }
+        selectOptions.text = stateOptions[i]
+        selectList.appendChild(selectOptions)
+    }
+
+    selectList.addEventListener("change", function() {
+        if (this.value === table3X3) {
+            changeState(3)
+        } else if (this.value === table4X4) {
+            changeState(4)
+        } else if (this.value === table5X5) {
+            changeState(5)
+        } else if (this.value === table10X10) {
+            changeState(10)
+        } else if (this.value === table15X15) {
+            changeState(15)
+        }
+    })
+
+    return selectList
+
+}
 
 function findWinnerItem(items, y, x) {
 
@@ -32,11 +101,12 @@ function findWinnerItem(items, y, x) {
 
 
 function render(state, item) {
-    rootElement.textContent = ""
+    tableElement.textContent = ""
+
     for (let i = 0; i < state.length; i++) {
         let rowElement = window.document.createElement("div");
         rowElement.classList.add("row");
-        rootElement.appendChild(rowElement)
+        tableElement.appendChild(rowElement)
 
         for (let j = 0; j < state[i].length; j++) {
             let element = createOutline(i, j)
@@ -195,6 +265,7 @@ function createOutline(y, x) {
     return squardElement
 }
 
-
+createSelect()
 render(state, [])
+createNewGameButton()
 

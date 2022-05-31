@@ -16,3 +16,13 @@
 .winnerItems {
     background-color: #74992e;
 }
+
+.table {
+    display: inline-block;
+}
+
+.status {
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 20px;
+}
