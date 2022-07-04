@@ -9,12 +9,19 @@ statusElement.classList.add("status")
 rootElement.appendChild(statusElement)
 
  
+const stateOptions = [
+    {text: "3x3", value: 3},
+    {text: "4x4", value: 4},
+    {text: "5x5", value: 5},
+    {text: "10x10", value: 10},
+    {text: "15x15", value: 15},
+]
 
 
 
 
 let state = [
-    [null, "X", null],
+    [null, null, null],
     [null, null, null],
     [null, null, null],
 ]
@@ -25,12 +32,12 @@ let state = [
 
 // let winnerItems = [[0,0],[1,1],[2,2]]
 
-function changeState(a) {
+function changeState(stateLength) {
     state = []
-
-    for (i = 0; i < a; i++) {
+    
+    for (let i = 0; i < stateLength; i++) {
         state.push([])
-        for (j = 0; j < a; j++) {
+        for (let j = 0; j < stateLength; j++) {
             state[i].push(null)
         }
 
@@ -47,44 +54,29 @@ function createNewGameButton() {
 }
 
 function createSelect() {
-    let table3X3 = "3x3"
-    let table4X4 = "4x4"
-    let table5X5 = "5x5"
-    let table10X10 = "10x10"
-    let table15X15 = "15x15"
-
-    let stateOptions = [table3X3, table4X4, table5X5, table10X10, table15X15]
-
     let selectList = document.createElement("select");
-    statusElement.appendChild(selectList)
 
-    for (i = 0; i < stateOptions.length; i++) {
+
+    for (let i = 0; i < stateOptions.length; i++) {
         let selectOptions = document.createElement("option")
-        selectOptions.value = stateOptions[i]
-        if (selectOptions.value === table3X3) {
+        selectOptions.value = i
+        if (selectOptions.value === 0) {
             selectOptions.selected = "selected"
         }
-        selectOptions.text = stateOptions[i]
+        selectOptions.text = stateOptions[i].text
         selectList.appendChild(selectOptions)
     }
 
     selectList.addEventListener("change", function() {
-        if (this.value === table3X3) {
-            changeState(3)
-        } else if (this.value === table4X4) {
-            changeState(4)
-        } else if (this.value === table5X5) {
-            changeState(5)
-        } else if (this.value === table10X10) {
-            changeState(10)
-        } else if (this.value === table15X15) {
-            changeState(15)
-        }
+        
+        changeState(stateOptions[this.value].value)
     })
 
-    return selectList
+    statusElement.appendChild(selectList)
 
+    return selectList
 }
+
 
 function findWinnerItem(items, y, x) {
 
@@ -97,7 +89,6 @@ function findWinnerItem(items, y, x) {
     return items.find(findWinerElement)
 
 }
-
 
 
 function render(state, item) {
@@ -220,7 +211,38 @@ function getFindWinning() {
     return winnerItems = []
 }
 
+function putZero (state) {
+    let checker = "X"
+    let countOfNull = 0
 
+    while (checker === "X") {
+       
+        for ( let i = 0; i < state.length; i++) {
+            for (let j = 0; j < state.length; j++ ) {
+
+                if (state[i][j] === null) {
+                    countOfNull++
+                      
+                    if (Math.random() > 0.55) {
+                        state[i][j] = "O"
+                        checker = "O"
+                        return "O"
+                        
+                    }
+
+                }
+
+            }
+        }
+
+        if (countOfNull === 0) {
+            return
+        }
+
+    }
+
+
+}
 
 function getCurrentValue(state) {
     let currentValue
@@ -240,7 +262,9 @@ function getCurrentValue(state) {
 
     if (countOfX > countOfO) {
         currentValue = "O"
+       
     } else if (countOfX === countOfO) {
+        
         currentValue = "X"
     }
 
@@ -252,12 +276,22 @@ function createOutline(y, x) {
     squardElement.classList.add("outline");
 
     if (state[y][x] === null) {
+
+
+        
         squardElement.addEventListener("click", function (event) {
 
             state[y][x] = getCurrentValue(state)
             let winnerItems = getFindWinning()
             render(state, winnerItems)
             setTimeout(getFindWinning, 0)
+
+            if (state[y][x] === "X") {
+                putZero(state)
+                winnerItems = getFindWinning()
+                setTimeout( () => {render(state, winnerItems)}, 1000)
+                
+            }
 
         })
     }
